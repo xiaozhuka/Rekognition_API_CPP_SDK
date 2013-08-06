@@ -5,7 +5,7 @@ This C++ SDK intergrates ReKognition API. For more information about our ReKogni
 Usage:
 ==========================
 <ol>
-<il> Create response JSON object. </il>
+<li> Create response JSON object. </li>
  Json::Value response;
 2. Specify API request in a map object.
 const string api_addr_base = "https://rekognition.com/func/api/?";
