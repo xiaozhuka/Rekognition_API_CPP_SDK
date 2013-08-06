@@ -1,6 +1,6 @@
 Version 1.0:
 ==========================
-This C++ SDK intergrates ReKognition API. For more information about our ReKognition API, please read our documentation.
+This C++ SDK intergrates ReKognition API. For more information about our ReKognition API, please read our <a href="http://v2.rekognition.com/developer/docs">documentation</a>.
 
 Usage:
 ==========================
