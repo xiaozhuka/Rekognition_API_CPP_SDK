@@ -35,7 +35,7 @@ bool APICall(const string& api_addr_base,
 		return false;
 	}
 
-	curl_easy_setopt(curl, CURLOPT_POST, 0L);
+	curl_easy_setopt(curl, CURLOPT_POST, 1L);
 	curl_easy_setopt(curl, CURLOPT_HEADER, 0L);
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -47,23 +47,28 @@ bool APICall(const string& api_addr_base,
 			"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) "
 			"AppleWebKit/534.7 (KHTML, like Gecko) Chrome/7.0.517.41 Safari/534.7");
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
+	curl_easy_setopt(curl, CURLOPT_URL, api_addr_base.c_str());
 
-	string query_url = api_addr_base;
+	string post_fields = "";
 	for (map<string, string>::const_iterator iter = query_config.begin();
 			iter != query_config.end(); ++iter) {
-		query_url.append("&");
-		query_url.append(iter->first);
-		query_url.append("=");
-		query_url.append(iter->second);
+		post_fields.append("&");
+		post_fields.append(iter->first);
+		post_fields.append("=");
+		post_fields.append(iter->second);
 	}
 
-	curl_easy_setopt(curl, CURLOPT_URL, query_url.c_str());
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_fields.c_str());
 
 	string photos_page;
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &photos_page);
 
 	try {
-		curl_easy_perform(curl);
+		if (curl_easy_perform(curl) != CURLE_OK) {
+			cerr << "CURL calling error!" << endl;
+			curl_easy_cleanup(curl);
+			return false;
+		}
 	} catch (...) {
 		cerr << "CURL calling error!" << endl;
 		curl_easy_cleanup(curl);
